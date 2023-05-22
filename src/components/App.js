@@ -1,27 +1,36 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import '../styles/App.css';
 
 const App = () => {
   const [width, setWidth] = useState("");
   const [height, setHeight] = useState("");
   const [backgroundColor, setBackgroundColor] = useState("");
-  let [t,setT]=useState(false);
+  const [boxes, setBoxes] = useState([]);
 
-  const ti=(event)=>{
-   setHeight(event.target.value);
-  }
-  const wi=(event)=>{
+  const handleWidthChange = (event) => {
     setWidth(event.target.value);
-  }
-  const co=(event)=>{
-    setBackgroundColor(event.target.value);
-  }
-const hi=()=>{
-    
-    console.log(height+""+width+""+backgroundColor);
+  };
 
-   setT(true);
-}
+  const handleHeightChange = (event) => {
+    setHeight(event.target.value);
+  };
+
+  const handleColorChange = (event) => {
+    setBackgroundColor(event.target.value);
+  };
+
+  const handleCreateBox = () => {
+    const newBox = {
+      width,
+      height,
+      backgroundColor,
+    };
+    setBoxes([...boxes, newBox]);
+    setWidth("");
+    setHeight("");
+    setBackgroundColor("");
+  };
+
   return (
     <div id="main">
       <h1>Box Creator</h1>
@@ -30,7 +39,8 @@ const hi=()=>{
         <input
           id="width"
           type="number"
-          onChange={wi}
+          value={width}
+          onChange={handleWidthChange}
         />
       </div>
       <div>
@@ -38,25 +48,35 @@ const hi=()=>{
         <input
           id="height"
           type="number"
-          onChange={ti}
+          value={height}
+          onChange={handleHeightChange}
         />
-        
       </div>
       <div>
         <label htmlFor="backgroundColor">Background Color:</label>
         <input
           id="backgroundColor"
           type="text"
-          onChange={co}
-
+          value={backgroundColor}
+          onChange={handleColorChange}
         />
       </div>
-      <button className='create-btn' onClick={hi}>Create Box </button>
-      {t?<div id="box-conatiner" style={{height:`${height}px`,width:`${width}px`,backgroundColor:`${backgroundColor}`}}></div>
-:null}
+      <button className='create-btn' onClick={handleCreateBox}>Create Box</button>
+      <div id="box-container">
+        {boxes.map((box, index) => (
+          <div
+            key={index}
+            style={{
+              width: `${box.width}px`,
+              height: `${box.height}px`,
+              backgroundColor: box.backgroundColor,
+              margin: "10px",
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 };
-
 
 export default App;
